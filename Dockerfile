@@ -159,4 +159,6 @@ RUN mkdir -p /etc/nginx/logs \
 COPY /root /
 
 WORKDIR /data
+
+HEALTHCHECK CMD netstat -lnt | grep :80 || exit 1
 #CMD ["/usr/sbin/nginx"] now started from /etc/services.d/nginx/run
