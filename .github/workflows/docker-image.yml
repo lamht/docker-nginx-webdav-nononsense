@@ -9,6 +9,8 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: Check
+        run: echo ${{ secrets.DOCKERHUB_USERNAME }}
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up QEMU
