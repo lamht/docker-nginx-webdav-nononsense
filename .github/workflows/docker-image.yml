@@ -8,6 +8,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    environment: DOCKERHUB_USERNAME
     steps:
       - name: Check
         run: echo ${{ secrets.DOCKERHUB_USERNAME }}
