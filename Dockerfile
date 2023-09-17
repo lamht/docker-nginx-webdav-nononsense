@@ -36,7 +36,8 @@ RUN apt-get update && \
   libxslt1-dev \
   mime-support \
   wget \
-  zlib1g-dev && \
+  zlib1g-dev \
+  net-tools && \
   apt-get -y autoclean
 
 WORKDIR /usr/src
