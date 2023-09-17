@@ -36,8 +36,7 @@ RUN apt-get update && \
   libxslt1-dev \
   mime-support \
   wget \
-  zlib1g-dev \
-  net-tools && \
+  zlib1g-dev && \
   apt-get -y autoclean
 
 WORKDIR /usr/src
@@ -131,7 +130,8 @@ RUN apt-get update && \
   libxml2-dev \
   libxslt1-dev \
   mime-support \
-  zlib1g-dev && \
+  zlib1g-dev \
+  net-tools && \
   apt-get -y autoclean
 
 RUN mkdir /data \
