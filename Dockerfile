@@ -6,7 +6,7 @@
 # FAQ: 
 # Q: Will you add SSL? N: No, I can't bother, I use a reverse proxy. Pull requests are however welcome!
 
-FROM alpine:3.18.3 AS builder
+FROM lscr.io/linuxserver/baseimage-ubuntu:focal AS builder
 
 LABEL maintainer="Daniel Graziotin, daniel@ineed.coffee"
 
@@ -21,8 +21,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LANG C.UTF-8
 ENV APT_LISTCHANGES_FRONTEND none
 
-RUN apk update && \
-  apk add \
+RUN apt-get update && \
+  apt-get -y install --no-install-recommends \
   apache2-utils \
   automake \
   build-essential \
@@ -36,7 +36,8 @@ RUN apk update && \
   libxslt1-dev \
   mime-support \
   wget \
-  zlib1g-dev
+  zlib1g-dev && \
+  apt-get -y autoclean
 
 WORKDIR /usr/src
 RUN wget https://nginx.org/download/nginx-${NGINX_VER}.tar.gz -O /usr/src/nginx-${NGINX_VER}.tar.gz && \
@@ -111,14 +112,14 @@ RUN ./configure --prefix=/etc/nginx \
 RUN make -j${MAKE_THREADS} && \
   make install
 
-FROM alpine:3.18.3
+FROM lscr.io/linuxserver/baseimage-ubuntu:focal
 COPY --from=builder /etc/nginx /etc/nginx
 COPY --from=builder /usr/lib/nginx/modules/ /usr/lib/nginx/modules/
 COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=builder /var/log/nginx /var/log/nginx
 
-RUN apk update && \
-  apk add \
+RUN apt-get update && \
+  apt-get -y install --no-install-recommends \
   apache2-utils \
   libcurl4-openssl-dev \
   libgd-dev \
@@ -131,7 +132,8 @@ RUN apk update && \
   mime-support \
   zlib1g-dev \
   net-tools && \
-  apk -y cache clean
+  apt-get -y clean && \
+  rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /data \
   && chown abc:abc /data
