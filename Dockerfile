@@ -22,7 +22,7 @@ ENV LANG C.UTF-8
 ENV APT_LISTCHANGES_FRONTEND none
 
 RUN apk update && \
-  apk add -y --no-install-recommends \
+  apk add \
   apache2-utils \
   automake \
   build-essential \
@@ -118,7 +118,7 @@ COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=builder /var/log/nginx /var/log/nginx
 
 RUN apk update && \
-  apk add -y --no-install-recommends \
+  apk add \
   apache2-utils \
   libcurl4-openssl-dev \
   libgd-dev \
