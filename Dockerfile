@@ -6,7 +6,7 @@
 # FAQ: 
 # Q: Will you add SSL? N: No, I can't bother, I use a reverse proxy. Pull requests are however welcome!
 
-FROM lscr.io/linuxserver/baseimage-ubuntu:focal AS builder
+FROM alpine:3.18.3 AS builder
 
 LABEL maintainer="Daniel Graziotin, daniel@ineed.coffee"
 
@@ -21,8 +21,8 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LANG C.UTF-8
 ENV APT_LISTCHANGES_FRONTEND none
 
-RUN apt-get update && \
-  apt-get -y install --no-install-recommends \
+RUN apk add update && \
+  apk add -y --no-install-recommends \
   apache2-utils \
   automake \
   build-essential \
@@ -36,8 +36,7 @@ RUN apt-get update && \
   libxslt1-dev \
   mime-support \
   wget \
-  zlib1g-dev && \
-  apt-get -y autoclean
+  zlib1g-dev
 
 WORKDIR /usr/src
 RUN wget https://nginx.org/download/nginx-${NGINX_VER}.tar.gz -O /usr/src/nginx-${NGINX_VER}.tar.gz && \
@@ -112,14 +111,14 @@ RUN ./configure --prefix=/etc/nginx \
 RUN make -j${MAKE_THREADS} && \
   make install
 
-FROM lscr.io/linuxserver/baseimage-ubuntu:focal
+FROM alpine:3.18.3
 COPY --from=builder /etc/nginx /etc/nginx
 COPY --from=builder /usr/lib/nginx/modules/ /usr/lib/nginx/modules/
 COPY --from=builder /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=builder /var/log/nginx /var/log/nginx
 
-RUN apt-get update && \
-  apt-get -y install --no-install-recommends \
+RUN apk update && \
+  apk add -y --no-install-recommends \
   apache2-utils \
   libcurl4-openssl-dev \
   libgd-dev \
@@ -132,7 +131,7 @@ RUN apt-get update && \
   mime-support \
   zlib1g-dev \
   net-tools && \
-  apt-get -y autoclean
+  apk -y cache clean
 
 RUN mkdir /data \
   && chown abc:abc /data
