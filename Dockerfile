@@ -21,7 +21,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LANG C.UTF-8
 ENV APT_LISTCHANGES_FRONTEND none
 
-RUN apk add update && \
+RUN apk update && \
   apk add -y --no-install-recommends \
   apache2-utils \
   automake \
